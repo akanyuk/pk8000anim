@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 pic() {
     if [ -n "${PK8000ANIM:-}" ]; then "$PK8000ANIM" "$@"; return; fi
     if command -v pk8000anim >/dev/null 2>&1; then pk8000anim "$@"; return; fi
-    /home/marinov/go/src/github.com/akanyuk/sura_ap/pk8000anim "$@"
+    /home/marinov/go/src/github.com/akanyuk/pk8000anim/pk8000anim "$@"
 }
 
 pic asm player.asm data.asm -o example.cas
