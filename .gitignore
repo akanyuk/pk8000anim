@@ -1,0 +1,10 @@
+# бинарники и выходные файлы
+pk8000pic/pk8000pic
+pk8000pic/out/
+**/out/
+*.cas
+!pk8000pic/example/*.cas
+
+# системный мусор
+*.log
+__pycache__/
