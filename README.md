@@ -15,7 +15,6 @@
 ## pk8000pic
 
 ```sh
-cd pk8000pic
 go build -o pk8000pic .
 
 # собрать программу из картинки
