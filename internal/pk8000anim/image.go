@@ -44,10 +44,10 @@ type Frame struct {
 }
 
 // LoadGIF читает GIF-анимацию: композиция кадров (disposal, смещения, прозрачность),
-// задержки кадров (0 -> 1 тик, максимум 255). Каждый кадр масштабируется в 256x192.
-// Вторым значением возвращает признак чёрно-белого GIF — он определяется по
-// исходным кадрам ДО масштабирования (фильтр даёт полутона и ломает определение).
-func LoadGIF(path string, stretch bool) ([]Frame, bool, error) {
+// задержки кадров (0 -> 1 тик, максимум 255). Каждый кадр переносится в экран
+// 256x192 попиксельно (1:1) в левый верхний угол, лишнее обрезается.
+// Вторым значением возвращает признак чёрно-белого GIF.
+func LoadGIF(path string) ([]Frame, bool, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, false, err
@@ -115,7 +115,7 @@ func LoadGIF(path string, stretch bool) ([]Frame, bool, error) {
 		if delay > 255 {
 			delay = 255
 		}
-		frames = append(frames, Frame{Img: FitTo256x192(canvas, stretch), Delay: delay})
+		frames = append(frames, Frame{Img: BlitTo256x192(canvas), Delay: delay})
 
 		switch disposal {
 		case gif.DisposalBackground:
@@ -151,57 +151,20 @@ func luminance(c color.RGBA) int {
 	return (int(c.R)*299 + int(c.G)*587 + int(c.B)*114) / 1000
 }
 
-// FitTo256x192 масштабирует изображение в 256x192.
-// При stretch — с растяжением; иначе — с сохранением пропорций и чёрными полями.
-func FitTo256x192(src image.Image, stretch bool) *image.RGBA {
+// BlitTo256x192 переносит кадр в экран 256x192 попиксельно (1:1).
+// Кадр меньше экрана — в левый верхний угол, больше — обрезается.
+func BlitTo256x192(src image.Image) *image.RGBA {
 	dst := image.NewRGBA(image.Rect(0, 0, 256, 192))
 	sb := src.Bounds()
-	sw, sh := sb.Dx(), sb.Dy()
-	if stretch {
-		scaleInto(src, sb, dst, image.Rect(0, 0, 256, 192))
-		return dst
+	w, h := sb.Dx(), sb.Dy()
+	if w > 256 {
+		w = 256
 	}
-	scale := math.Min(256.0/float64(sw), 192.0/float64(sh))
-	dw := int(math.Round(float64(sw) * scale))
-	dh := int(math.Round(float64(sh) * scale))
-	if dw < 1 {
-		dw = 1
+	if h > 192 {
+		h = 192
 	}
-	if dh < 1 {
-		dh = 1
-	}
-	off := image.Rect((256-dw)/2, (192-dh)/2, (256-dw)/2+dw, (192-dh)/2+dh)
-	scaleInto(src, sb, dst, off)
+	draw.Draw(dst, image.Rect(0, 0, w, h), src, sb.Min, draw.Src)
 	return dst
-}
-
-// scaleInto — усреднение по области (box filter) из src в заданный прямоугольник dst.
-func scaleInto(src image.Image, sb image.Rectangle, dst *image.RGBA, dr image.Rectangle) {
-	for y := dr.Min.Y; y < dr.Max.Y; y++ {
-		sy0 := sb.Min.Y + (y-dr.Min.Y)*sb.Dy()/dr.Dy()
-		sy1 := sb.Min.Y + (y-dr.Min.Y+1)*sb.Dy()/dr.Dy()
-		if sy1 <= sy0 {
-			sy1 = sy0 + 1
-		}
-		for x := dr.Min.X; x < dr.Max.X; x++ {
-			sx0 := sb.Min.X + (x-dr.Min.X)*sb.Dx()/dr.Dx()
-			sx1 := sb.Min.X + (x-dr.Min.X+1)*sb.Dx()/dr.Dx()
-			if sx1 <= sx0 {
-				sx1 = sx0 + 1
-			}
-			var r, g, b, n uint32
-			for sy := sy0; sy < sy1; sy++ {
-				for sx := sx0; sx < sx1; sx++ {
-					pr, pg, pb, _ := src.At(sx, sy).RGBA()
-					r += pr >> 8
-					g += pg >> 8
-					b += pb >> 8
-					n++
-				}
-			}
-			dst.SetRGBA(x, y, color.RGBA{uint8(r / n), uint8(g / n), uint8(b / n), 255})
-		}
-	}
 }
 
 func dist2(c color.RGBA, p color.RGBA) int {

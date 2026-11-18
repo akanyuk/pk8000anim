@@ -20,9 +20,11 @@ const usage = `pk8000anim — парсер GIF-анимации в програ�
         -o каталог     каталог вывода (по умолчанию рядом с GIF)
         -name имя      имя проекта/файла на ленте (до 6 символов)
         -border N      цвет рамки 0..15 (по умолчанию 0 — чёрный)
-        -stretch       растянуть кадры до 256x192 без сохранения пропорций
         -bw            принудительно чёрно-белый режим парсинга
                        (автоматически включается для двухцветных GIF)
+
+      Кадры выводятся попиксельно (1:1): меньше экрана — в левый верхний
+      угол, больше — обрезаются.
 
   pk8000anim asm <player.asm> <data.asm> [файлы...] [флаги]
       Собирает исходники ассемблера 8080 в .cas (файлы объединяются по порядку).
@@ -70,7 +72,6 @@ func cmdParse(args []string) error {
 	outDir := fs.String("o", "", "каталог вывода")
 	name := fs.String("name", "", "имя проекта")
 	border := fs.Int("border", 0, "цвет рамки 0..15")
-	stretch := fs.Bool("stretch", false, "растянуть до 256x192")
 	bw := fs.Bool("bw", false, "чёрно-белый режим парсинга")
 	fs.Parse(args)
 	if fs.NArg() != 1 {
@@ -100,7 +101,7 @@ func cmdParse(args []string) error {
 		return err
 	}
 
-	frames, autoBW, err := pk8000anim.LoadGIF(gifPath, *stretch)
+	frames, autoBW, err := pk8000anim.LoadGIF(gifPath)
 	if err != nil {
 		return err
 	}
