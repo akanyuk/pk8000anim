@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/akanyuk/sura_ap/internal/pk8000anim"
+	"github.com/akanyuk/pk8000anim/internal/pk8000anim"
 )
 
 const usage = `pk8000anim — парсер GIF-анимации в программы ПК8000 (Хобби, Веста, Сура).

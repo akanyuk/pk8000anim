@@ -1,3 +1,3 @@
-module github.com/akanyuk/sura_ap
+module github.com/akanyuk/pk8000anim
 
 go 1.27
