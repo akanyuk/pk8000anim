@@ -1,0 +1,42 @@
+; ; Коды команд
+—____ соды команд.
+0 1 2 3 4 5 6 hk
+Ao Ae eS i о РИ
+0’ МОР 1х1 STAX INX INR DCR МУГ ВГС
+В, & в В В В В, +
+I = LX] STAX INX INR DCR MVI RAL
+р, & »p р D D D, +
+2 ees) LXI SHLD INX INR DCR MVI DAA
+H. &. > ae | H H H, +
+3 — сх STA МХ INR DCR MVI STC
+SP, & *K SP м M М, +t .
+4 MOV MOV MOV MOV MOV MOV МОУ MOV
+В,В B,C B,D B,E B,H BL B,M B,A
+5 MOV MOV’ MOV MOV MOV Mov MOV -MOV
+D,B D,G D,D D,E D,H D,L ОМ О,А
+6 MOV MOV Mov MOV МОУ МОУ Mov MOV
+H,B H.C. H,D НЕ HH HL HM H,A
+7 МОУ МОУ. MOV MOV Mov МОУ MOV МОУ
+M,B MC MD МЕ MH ML MM MA
+8 ADD ADD ADD ADD ADD. ADD ADD ADD
+B C D E H L M A
+9 SUB SUB SUB SUB SUB SUB SUB SUB
+B Co a 1) E H IC, M A
+A ANA ANA ANA ANA ANA ANA ANA ANA
+_B С D E H It M A
+B ОКА ОКА ОБА ОКА ОБА ORA ОКА ORA
+В С D E H L M A
+С RNZ POP JNZ МР CNZ PUSH ADI RST
+B Ж ж * B ++ 0
+р КМС POP JNC от CNC PUSH SUI RST
+D ж М *K D + 2
+Е RPO РОР ро XTHL CPO PUSH ANI RST
+H * >k H aus 4
+F RP POP JP DI CP PUSH ORI RST
+Ss PSW ж * РМГ + 6
+0 1 2 3 4 5 6 7
+Se ge a Tee ee ee ee ae 4
+N= номер порта ввода-вывода |
+ж—двухбайтовый операнд — ADR ;
+60 ч
+* -

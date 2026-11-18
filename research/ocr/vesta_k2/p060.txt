@@ -1,0 +1,39 @@
+1 | |
+. КОДЫ КОМАНД МИКРОПРОЦЕССОРА Х589 приложение 5
+ae + Г | › О Е
+8 | МР Хх STAX их INR DCR МУ! RLC DAD (ШАХ | OCX тив DCR MV! mec | 8
+B& B B B B BF B B Г с с Cz
+1 - LX! STAX INX INR ocr МУ! RAL DAD | LDAX DCX IWR DCR МУ RAR |1
+0,8 0 D D О 0,2 D Г. D E E Es
+2| - LX! | SHLD | INX ие | DCR | ММ | DAA DAD | LALO | DCX | IMR | OCR | мм | CMA | 2
+18 © L] H H H,2 H ® H L L L,#
+3 = LXE STA INX INR DCR MVI STC т ОАО LDA OCx WR DCR м1 CMC |3
+$Р8 * SP м м Mz SP * SP A A А, =
+4; MOY МОУ mov Mov Mov Mov Moy MOY Moy Mov | MOV MODY МУ Mov Moy moy | 4
+В.В B.C 8,0 В,Е ВИ BLL B,M B,A С.В С.С Co С.Е С.Н С.Е С.М С.А 7
+5] MOV Mov Mov M Ov mov MOV Mov MOV MOV mov MOY MDV Mov MODY MOY Moy |5
+D,B 0,С 0,0 О, Е D,H DL D,M D,A Е, В Ec ED E.E E,W E,L E.M Е,А
+6| МОУ MOV mov MOY Mov Mov MOV MOY Mov Moy МСУ MDV mov MOY MDV му |6
+H,B H,C Н, О HE H,H HLL HM HA L,B Lc L,D Е.Е ЕН Е, Е LM LA
+7| Mov Mov MOV mov Mov MOV HLT MoV Mov mov wey МОУ mov MODY mov moby |7
+MB М.С M,D М.Е М.Н М, 1 МА А, В А.С A.D А.Е А.Н A,L AM А.А
+.
+8} ADD ADD ADD ADD ADD ADD ADD ADD ADC ADC ADC ADC ADC ADC АС - ABC |8
+B с D E H L M A в С D E H L M A
+9| SUB SUB SUB SUB SUB SUB SUB SUB SBB SBB SBB SBB SBB SBB $88 Sep |9
+| B с 0 Е H L M A B с 0 Е H L M A
+А| АМА AWA AWA ANA ANA AWA ANA AWA XRA XRA XRA XRA XRA XRA XRA XRA | A
+B [в 0 E H L M A B с D E H L м А
+8| ORA DRA ORA DRA ORA ORA ORA ORA СМР СМР СМР СМР СМР | СМР СМР СМР |8
+В С D E H L M A B с 0 Е H L M A
+Cl RNZ POP INZ JMP CNZ | PUSH ADI RST RZ RET 32 = Cz CALL ACI RST {C
+B * ” # B я @ м „ “ я 1
+0; RAC POP INC OUT CNC | PUSH SUI RST RC г Jc In cc 5 $81 RST | DB
+| 3 N „ D я 2 „ р * a 3
+Е! RPD POP IPO XTHL CPO | PUSH ANI RST RPE | PCHL | JPE | XCHG | CPE - XR! RST |Е
+H . к H tt 4 ™ * a 5
+F RP POP JP Dl СР PUSH ori RST RM | SPHL JM Е CM 2 СР! RST |Е
+PSW = * PSW я 6 * * # 7
+aa ae ae) a ea
+М- номер порта ввода-вывода & -двухбайтовый операнд - 016
+« -двухбайтовый операнд-АОВВ #-однобайтсвый олеранд- 0B
