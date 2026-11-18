@@ -11,6 +11,37 @@
   скриншоты экрана PNG, чтение/запись памяти и портов по HTTP) — для автотестов.
 - **`docs/PK8000_stroenie_ekrana.md`** — справочник по видеосистеме ПК8000.
 
+## Установка
+
+Скачать бинарник для своей системы со [страницы релизов](https://github.com/akanyuk/pk8000anim/releases)
+(текущая версия — [v0.1.0-alpha.1](https://github.com/akanyuk/pk8000anim/releases/tag/v0.1.0-alpha.1)):
+
+| Файл | Платформа |
+|---|---|
+| `pk8000anim-linux-amd64` | Linux x86-64 |
+| `pk8000anim-windows-amd64.exe` | Windows x86-64 |
+| `pk8000anim-darwin-arm64` | macOS (Apple Silicon) |
+| `pk8000anim-darwin-amd64` | macOS (Intel) |
+
+Переименовать в `pk8000anim` (`.exe` для Windows) и положить в каталог из `PATH`:
+
+```sh
+# Linux / macOS
+install -m 755 pk8000anim-linux-amd64 /usr/local/bin/pk8000anim
+pk8000anim    # выведет справку
+
+# Windows (PowerShell)
+Move-Item pk8000anim-windows-amd64.exe pk8000anim.exe
+```
+
+Либо собрать из исходников (нужен установленный Go):
+
+```sh
+git clone https://github.com/akanyuk/pk8000anim.git
+cd pk8000anim
+make            # все платформы в dist/; или: make build / go build -o pk8000anim .
+```
+
 ## pk8000anim
 
 ```sh
