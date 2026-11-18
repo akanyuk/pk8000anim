@@ -145,9 +145,9 @@ prd:    MOV E,M
         MOV D,M
         INX H          ; DE = начальный адрес видео-ОЗУ
 
-cmd:    MOV A,M
+NEXTCMD:    MOV A,M
         INX H
-        STA CMD
+        STA CMDTMP
         ANI 0C0h
         JZ doCopy
         CPI 40h
@@ -161,7 +161,7 @@ cmd:    MOV A,M
         STA PLX+2
         RET
 
-doCopy: LDA CMD
+doCopy: LDA CMDTMP
         ANI 3Fh
         MOV B,A
         INR B
@@ -171,13 +171,13 @@ c1:     MOV A,M
         INX D
         DCR B
         JNZ c1
-        JMP cmd
+        JMP NEXTCMD
 
 doFillLong:
-        LDA CMD
+        LDA CMDTMP
         ANI 20h
         JNZ doLong
-        LDA CMD
+        LDA CMDTMP
         ANI 1Fh
         MOV B,A
         INR B
@@ -187,33 +187,33 @@ f1:     STAX D
         INX D
         DCR B
         JNZ f1
-        JMP cmd
+        JMP NEXTCMD
 
-doLong: LDA CMD
+doLong: LDA CMDTMP
         ANI 0Fh
         MOV B,A
         MVI C,0
         XCHG
         DAD B
         XCHG           ; +xxxx*256
-        LDA CMD
+        LDA CMDTMP
         ANI 10h
-        JZ cmd
+        JZ NEXTCMD
         MVI B,0
         MVI C,80h
         XCHG
         DAD B
         XCHG           ; +128
-        JMP cmd
+        JMP NEXTCMD
 
-doSkip: LDA CMD
+doSkip: LDA CMDTMP
         ANI 3Fh
         MOV B,A
         INR B
 s1:     INX D
         DCR B
         JNZ s1
-        JMP cmd
+        JMP NEXTCMD
 
 ; копирование BC байт из HL в DE (адреса назначения — в видео-ОЗУ)
 BLKCP:  MOV A,M
@@ -237,7 +237,7 @@ FILM:   STAX D
         JNZ FILM
         RET
 
-CMD:    DB 0
+CMDTMP: DB 0
 `, border, colorInit)
 }
 

@@ -225,7 +225,11 @@ func (a *Assembler) pass1() error {
 			continue
 		}
 		if l.label != "" && l.mnem != "EQU" {
-			a.labels[strings.ToUpper(l.label)] = pc
+			key := strings.ToUpper(l.label)
+			if _, dup := a.labels[key]; dup {
+				return fmt.Errorf("строка %d: метка %s уже определена (имена регистронезависимы)", l.num, l.label)
+			}
+			a.labels[key] = pc
 		}
 		sz, err := a.sizeOf(l)
 		if err != nil {
@@ -236,7 +240,11 @@ func (a *Assembler) pass1() error {
 			if err != nil {
 				return fmt.Errorf("строка %d: %w", l.num, err)
 			}
-			a.labels[strings.ToUpper(l.label)] = v
+			key := strings.ToUpper(l.label)
+			if _, dup := a.labels[key]; dup {
+				return fmt.Errorf("строка %d: метка %s уже определена (имена регистронезависимы)", l.num, l.label)
+			}
+			a.labels[key] = v
 			continue
 		}
 		pc += sz
