@@ -227,14 +227,14 @@ BLKCP:  MOV A,M
         RET
 
 ; заполнение BC байт по DE значением A
-FILM:   STAX D
+FILM:   MOV H,A          ; значение в H: MOV не трогает флаги
+fm1:    STAX D
         INX D
         DCX B
-        PUSH PSW
         MOV A,B
         ORA C
-        POP PSW
-        JNZ FILM
+        MOV A,H
+        JNZ fm1
         RET
 
 CMDTMP: DB 0

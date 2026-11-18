@@ -45,18 +45,20 @@ type Frame struct {
 
 // LoadGIF читает GIF-анимацию: композиция кадров (disposal, смещения, прозрачность),
 // задержки кадров (0 -> 1 тик, максимум 255). Каждый кадр масштабируется в 256x192.
-func LoadGIF(path string, stretch bool) ([]Frame, error) {
+// Вторым значением возвращает признак чёрно-белого GIF — он определяется по
+// исходным кадрам ДО масштабирования (фильтр даёт полутона и ломает определение).
+func LoadGIF(path string, stretch bool) ([]Frame, bool, error) {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	defer f.Close()
 	g, err := gif.DecodeAll(f)
 	if err != nil {
-		return nil, fmt.Errorf("не удалось декодировать %s: %w", path, err)
+		return nil, false, fmt.Errorf("не удалось декодировать %s: %w", path, err)
 	}
 	if len(g.Image) == 0 {
-		return nil, fmt.Errorf("%s: в GIF нет кадров", path)
+		return nil, false, fmt.Errorf("%s: в GIF нет кадров", path)
 	}
 
 	bg := color.RGBA{0, 0, 0, 255}
@@ -75,6 +77,7 @@ func LoadGIF(path string, stretch bool) ([]Frame, error) {
 	}
 	canvas := image.NewRGBA(image.Rect(0, 0, w, h))
 
+	colors := map[color.RGBA]bool{}
 	var frames []Frame
 	for i, src := range g.Image {
 		var snapshot *image.RGBA
@@ -88,6 +91,19 @@ func LoadGIF(path string, stretch bool) ([]Frame, error) {
 		}
 
 		draw.Draw(canvas, src.Bounds(), src, src.Bounds().Min, draw.Over)
+
+		if len(colors) <= 2 {
+			b := canvas.Bounds()
+		loop:
+			for y := b.Min.Y; y < b.Max.Y; y++ {
+				for x := b.Min.X; x < b.Max.X; x++ {
+					colors[canvas.RGBAAt(x, y)] = true
+					if len(colors) > 2 {
+						break loop
+					}
+				}
+			}
+		}
 
 		delay := 1
 		if i < len(g.Delay) {
@@ -110,24 +126,11 @@ func LoadGIF(path string, stretch bool) ([]Frame, error) {
 			}
 		}
 	}
-	return frames, nil
+	return frames, isBWColors(colors), nil
 }
 
-// IsBWShot проверяет, что кадры содержат не более двух «чёрно-белых» цветов
-// (тёмный и светлый) — тогда анимацию можно парсить в ч/б режиме.
-func IsBWShot(imgs []*image.RGBA) bool {
-	colors := map[color.RGBA]bool{}
-	for _, img := range imgs {
-		b := img.Bounds()
-		for y := b.Min.Y; y < b.Max.Y; y++ {
-			for x := b.Min.X; x < b.Max.X; x++ {
-				colors[img.RGBAAt(x, y)] = true
-				if len(colors) > 2 {
-					return false
-				}
-			}
-		}
-	}
+// isBWColors: не более двух цветов, из которых один тёмный и один светлый.
+func isBWColors(colors map[color.RGBA]bool) bool {
 	if len(colors) > 2 {
 		return false
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image"
 	"os"
 	"path/filepath"
 	"strings"
@@ -101,17 +100,12 @@ func cmdParse(args []string) error {
 		return err
 	}
 
-	frames, err := pk8000anim.LoadGIF(gifPath, *stretch)
+	frames, autoBW, err := pk8000anim.LoadGIF(gifPath, *stretch)
 	if err != nil {
 		return err
 	}
 
-	// авто-ч/б: двухцветный «чёрный по белому» GIF
-	imgs := make([]*image.RGBA, 0, len(frames))
-	for _, f := range frames {
-		imgs = append(imgs, f.Img)
-	}
-	mono := *bw || pk8000anim.IsBWShot(imgs)
+	mono := *bw || autoBW
 	kind := "цветной"
 	if mono {
 		kind = "чёрно-белый"
