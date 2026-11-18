@@ -1,14 +1,14 @@
 #!/bin/sh
-# Сборка программы ПК8000: example.asm -> example.cas
-# Утилита-ассемблер pk8000pic (Go). Переопределить путь: PK8000PIC=...
+# Сборка анимации ПК8000: player.asm + data.asm -> example.cas
+# Утилита-ассемблер pk8000anim (Go). Переопределить путь: PK8000ANIM=...
 set -e
 cd "$(dirname "$0")"
 
 pic() {
-    if [ -n "${PK8000PIC:-}" ]; then "$PK8000PIC" "$@"; return; fi
-    if command -v pk8000pic >/dev/null 2>&1; then pk8000pic "$@"; return; fi
-    /home/marinov/Downloads/pk8000pic/pk8000pic "$@"
+    if [ -n "${PK8000ANIM:-}" ]; then "$PK8000ANIM" "$@"; return; fi
+    if command -v pk8000anim >/dev/null 2>&1; then pk8000anim "$@"; return; fi
+    /home/marinov/go/src/github.com/akanyuk/sura_ap/pk8000anim "$@"
 }
 
-pic asm example.asm -o example.cas
+pic asm player.asm data.asm -o example.cas
 echo "Готово: example.cas (загрузить в эмуляторе ПК8000: Alt-F3)"

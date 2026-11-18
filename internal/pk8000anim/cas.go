@@ -1,4 +1,4 @@
-package pk8000pic
+package pk8000anim
 
 import (
 	"bytes"
